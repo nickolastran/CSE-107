@@ -1,0 +1,53 @@
+
+import random
+
+def test(n, trials):
+    bobHeadsCount = 0
+
+    for x in range(trials):
+        bobCoins = random.choices(["H", "T"], k = n + 1)
+        aliceCoins = random.choices(["H", "T"], k = n)
+
+        bobHeads = bobCoins.count("H")
+        aliceHeads = aliceCoins.count("H")
+
+        if bobHeads > aliceHeads:
+            bobHeadsCount += 1
+
+    relative_frequency = bobHeadsCount / trials
+    return relative_frequency
+
+n = 300
+trials = 1000
+result = test(n, trials)
+
+print(f"Relative Frequency: {result}")      # should print a value really close to 0.5
+
+# ---------------------------------------------------------------------------------------------- #
+
+def test(n, trials, p):
+    bobHeadsCount = 0
+
+    for i in range(trials):
+        bobCoins = random.choices(["H", "T"], weights = [p, 1 - p], k = n + 1)      # weighing out the complementary probability for each value
+        aliceCoins = random.choices(["H", "T"], weights = [p, 1 - p], k = n)
+
+        bobHeads = bobCoins.count("H")
+        aliceHeads = aliceCoins.count("H")
+
+        if bobHeads > aliceHeads:
+            bobHeadsCount += 1
+
+    relativeFrequency = bobHeadsCount / trials
+
+    return relativeFrequency
+
+probabilities = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]
+
+print("--------------------------")
+print("p\trelative frequency")
+print("--------------------------")
+
+for p in probabilities:
+    relativeFrequency = test(n = 300, trials = 1000, p = p)        # setting up parameters for the test (required n = 300, trials = 1000)
+    print(f"{p}\t{relativeFrequency:.3f}")
