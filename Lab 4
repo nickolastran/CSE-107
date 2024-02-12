@@ -1,0 +1,33 @@
+
+import numpy as np
+
+def simulateProcess(p, q, numTrials = 10000):
+    mean = np.zeros((9, 9))
+    variance = np.zeros((9, 9))
+
+    for i, pVal in enumerate(np.linspace(0.1, 0.9, 9)):
+        for j, qVal in enumerate(np.linspace(0.1, 0.9, 9)):
+            results = []                                        # Perform trials
+            for x in range(numTrials):
+                N = np.random.geometric(pVal)                   # Simulate flipping Coin 1 until first head
+                sequence = np.random.binomial(1, qVal, N)       # Simulate flipping Coin 2 N times
+                Y = np.sum(sequence)                            # Count number of heads
+                results.append(Y)
+            
+            mean[i, j] = np.mean(results)                       # Compute mean and variance
+            variance[i, j] = np.var(results)
+
+    return mean, variance
+
+def table(table, name):
+    print(name)
+    print(" q:    0.1   0.2   0.3   0.4   0.5   0.6   0.7   0.8   0.9")
+    print("  p -----------------------------------------------------------")
+    for i, row in enumerate(table):
+        print(f"{0.1 + i * 0.1:.1f} | {' '.join(f'{val:.3f}' for val in row)}")
+
+# Main
+mean, variance = simulateProcess(p = 0.5, q = 0.5)
+table(mean, "mean")
+print()
+table(variance, "variance")
