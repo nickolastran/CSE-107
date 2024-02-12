@@ -1,0 +1,43 @@
+
+import random
+
+# Function to simulate the described process
+def simTrials(a, c):
+    urn = ["azure"] * a + ["carmine"] * c
+    random.shuffle(urn)
+    
+    for i in range(len(urn)):
+        urn[i] = random.choice(["azure", "carmine"])
+    
+    return urn[-1]
+
+# Function to run trials and calculate relative frequency
+def runTrials(numTrials, aValues):
+    results = []
+
+    for a in aValues:
+        c = 100 - a
+        azureCount = 0
+
+        for x in range(numTrials):
+            lastBall = simTrials(a, c)
+            if lastBall == "azure":
+                azureCount += 1
+        
+        proportionAzure = azureCount / numTrials
+        results.append((a, c, round(proportionAzure, 4)))
+
+    return results
+
+# Run 2000 trials for each value of a
+numTrials = 2000                               
+aValues = [10, 20, 30, 40, 50]
+table_data = runTrials(numTrials, aValues)
+
+# Print the table
+print("----------------------------------------------")
+print("#azure #carmine proportion ending in azure")
+print("----------------------------------------------")
+for row in table_data:
+    print(f"{row[0]:>3} {row[1]:>3} {row[2]:.4f}")
+print("----------------------------------------------")
